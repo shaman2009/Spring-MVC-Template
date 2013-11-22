@@ -1,4 +1,4 @@
 Spring-MVC-Template
 ===================
 
-Spring MVC Template
+OOSIC  springTemplate
