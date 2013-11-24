@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<context:property-placeholder location="classpath:jdbc.properties,classpath:jms.properties" />
+
+	<context:component-scan base-package="com.oosic.webservice" />
+
+	<!-- Scans the classpath of this application for @Components to deploy as 
+		beans -->
+
+	<!-- Configures the @Controller programming model -->
+	<mvc:annotation-driven />
+
+	
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />     
+	
+	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views 
+		directory -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为1MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+
+	
+	<!-- configure data sources_OoPassUser -->
+	<bean id="OoPassUser_dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${jdbc.oopassuser.url}" />
+		<property name="user" value="${jdbc.oopassuser.username}" />
+		<property name="password" value="${jdbc.oopassuser.password}" />
+		<property name="minPoolSize" value="5" />
+		<property name="maxPoolSize" value="20" />
+		<property name="maxIdleTime" value="3600"/>
+	</bean>
+	<bean id="OoPassUser_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="OoPassUser_dataSource" />
+		<property name="mapperLocations"
+			value="classpath:com/oosic/webservice/mybatis/autodata/*.xml" />
+		<property name="typeHandlers">
+			<list>
+				<ref bean="UUIDTypeHandler" />
+			</list>
+		</property>
+		<property name="typeAliases">
+			<list>
+				<value>com.oosic.webservice.mybatis.typehandlers.UUIDTypeHandler
+				</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="OoPassUser_mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"
+			value="com.oosic.webservice.mybatis.autodata" />
+		<property name="sqlSessionFactory" ref="OoPassUser_sqlSessionFactory" />
+	</bean>
+	<tx:annotation-driven />
+	<!-- configure interceptors -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.oosic.webservice.interceptors.DebugDumpInterceptor">
+				<property name="enable" value="true" />
+			</bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean
+				class="com.oosic.webservice.interceptors.RequestTimeCalculatorInterceptor">
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- configure exception resolvers -->
+	<bean
+		class="com.oosic.webservice.exception.resolver.SpringTemplateErrorResolver">
+		<property name="enable" value="true" />
+	</bean>
+	<bean id="UUIDTypeHandler"
+		class="com.oosic.webservice.mybatis.typehandlers.UUIDTypeHandler"></bean>
+		
+	<!-- config active-mq jms -->
+
+
+<!-- 	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> -->
+<!-- 		<property name="brokerURL" value="${jms.broker.url}" /> -->
+<!-- 		<property name="useAsyncSend" value="true" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="outgingDestination" class="org.apache.activemq.command.ActiveMQQueue"> -->
+<!-- 		<constructor-arg index="0" value="${jms.outgoing.des}"></constructor-arg> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="incomingDestination" class="org.apache.activemq.command.ActiveMQQueue"> -->
+<!-- 		<constructor-arg index="0" value="${jms.incoming.des}"></constructor-arg> -->
+<!-- 	</bean> -->
+	
+	
+    
+	
+</beans>
+
