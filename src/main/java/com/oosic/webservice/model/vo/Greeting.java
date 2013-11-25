@@ -2,11 +2,8 @@ package com.oosic.webservice.model.vo;
 
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 
-
-@XStreamAlias(value = "greeting")
 public class Greeting {
 
     private final long id;
