@@ -99,32 +99,31 @@
 	<!-- config active-mq jms -->
 
 
-<!-- 	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> -->
-<!-- 		<property name="brokerURL" value="${jms.broker.url}" /> -->
-<!-- 		<property name="useAsyncSend" value="true" /> -->
-<!-- 	</bean> -->
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${jms.broker.url}" />
+		<property name="useAsyncSend" value="true" />
+	</bean>
 
-<!-- 	<bean id="outgingDestination" class="org.apache.activemq.command.ActiveMQQueue"> -->
-<!-- 		<constructor-arg index="0" value="${jms.outgoing.des}"></constructor-arg> -->
-<!-- 	</bean> -->
+	<bean id="outgingDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="${jms.outgoing.des}"></constructor-arg>
+	</bean>
 
-<!-- 	<bean id="incomingDestination" class="org.apache.activemq.command.ActiveMQQueue"> -->
-<!-- 		<constructor-arg index="0" value="${jms.incoming.des}"></constructor-arg> -->
-<!-- 	</bean> -->
+	<bean id="incomingDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="${jms.incoming.des}"></constructor-arg>
+	</bean>
 	
 	
-    <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">  
-        <property name="jndiName" value="${jms.jndi.connectionfactory}"></property> 
-    </bean>
+<!--     <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">   -->
+<!--         <property name="jndiName" value="${jms.jndi.connectionfactory}"></property>  -->
+<!--     </bean> -->
     
-<!--   Queue    -->
-    <bean id="outgingDestination" class="org.springframework.jndi.JndiObjectFactoryBean">  
-        <property name="jndiName" value="${jms.outgoing.destination}"></property>  
-    </bean>   
+<!--     <bean id="outgingDestination" class="org.springframework.jndi.JndiObjectFactoryBean">   -->
+<!--         <property name="jndiName" value="${jms.outgoing.destination}"></property>   -->
+<!--     </bean>    -->
     
-    <bean id="incomingDestination" class="org.springframework.jndi.JndiObjectFactoryBean">  
-        <property name="jndiName" value="${jms.incoming.destination}"></property>
-    </bean>   
+<!--     <bean id="incomingDestination" class="org.springframework.jndi.JndiObjectFactoryBean">   -->
+<!--         <property name="jndiName" value="${jms.incoming.destination}"></property> -->
+<!--     </bean>    -->
 	
    <bean id="incomingTemplate"  
            class="org.springframework.jms.core.JmsTemplate">  
